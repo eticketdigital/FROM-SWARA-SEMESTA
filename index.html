@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Swara Semesta - Checkout</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:#0d0d0d;
+    color:white;
+}
+
+.container{
+    max-width:500px;
+    margin:auto;
+    min-height:100vh;
+    background:#141414;
+}
+
+.banner img{
+    width:100%;
+    display:block;
+}
+
+.content{
+    padding:20px;
+}
+
+h2{
+    margin-bottom:20px;
+    font-size:24px;
+}
+
+.input-group{
+    margin-bottom:16px;
+}
+
+label{
+    display:block;
+    margin-bottom:8px;
+    font-size:14px;
+    color:#ddd;
+}
+
+input, select{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:10px;
+    background:#222;
+    color:white;
+    font-size:15px;
+}
+
+button{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:12px;
+    background:#666;
+    color:white;
+    font-size:17px;
+    font-weight:bold;
+    cursor:not-allowed;
+    transition:0.3s;
+}
+
+button.active{
+    background:#00c853;
+    cursor:pointer;
+}
+
+.summary{
+    background:#1e1e1e;
+    padding:18px;
+    border-radius:14px;
+    margin-bottom:20px;
+}
+
+.summary p{
+    margin-bottom:10px;
+}
+
+.qris{
+    text-align:center;
+    margin:25px 0;
+}
+
+.qris img{
+    width:260px;
+    border-radius:16px;
+}
+
+.total{
+    margin-top:18px;
+    font-size:28px;
+    color:#ffd54f;
+    font-weight:bold;
+}
+
+.instructions{
+    background:#1e1e1e;
+    padding:15px;
+    border-radius:12px;
+    margin-bottom:20px;
+    line-height:1.7;
+    color:#ddd;
+}
+
+.checkbox{
+    display:flex;
+    gap:10px;
+    margin-bottom:20px;
+    align-items:flex-start;
+}
+
+.checkbox input{
+    width:auto;
+    margin-top:4px;
+}
+
+.loading-screen{
+    position:fixed;
+    inset:0;
+    background:#000;
+    display:none;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    z-index:999;
+}
+
+.loader{
+    width:90px;
+    height:90px;
+    border:8px solid rgba(255,255,255,0.1);
+    border-top:8px solid #00ff88;
+    border-radius:50%;
+    animation:spin 1s linear infinite;
+    margin-bottom:25px;
+}
+
+.loading-text{
+    font-size:22px;
+    font-weight:bold;
+    text-align:center;
+}
+
+.loading-sub{
+    margin-top:10px;
+    color:#ccc;
+    font-size:15px;
+}
+
+.failed-page{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    min-height:100vh;
+    padding:30px;
+}
+
+.failed-box{
+    background:#1b1b1b;
+    padding:35px;
+    border-radius:20px;
+    width:100%;
+}
+
+.failed-box h1{
+    color:#ff5252;
+    margin-bottom:15px;
+}
+
+.timer{
+    background:#1e1e1e;
+    padding:12px;
+    border-radius:12px;
+    text-align:center;
+    margin-bottom:20px;
+    font-size:16px;
+    color:#ffd54f;
+    font-weight:bold;
+}
+
+.hidden{
+    display:none;
+}
+
+@keyframes spin{
+    100%{
+        transform:rotate(360deg);
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- HALAMAN 1 -->
+    <div id="page1">
+
+        <div class="banner">
+            <img src="banner-swara.jpg">
+        </div>
+
+        <div class="content">
+
+            <div class="timer">
+                Waktu Pengisian Data : <span id="countdown">07:00</span>
+            </div>
+
+            <h2>Data Pemesanan</h2>
+
+            <div class="input-group">
+                <label>Nama Lengkap</label>
+                <input type="text" id="nama">
+            </div>
+
+            <div class="input-group">
+                <label>Nomor Identitas (NIK, SIM, PASPOR, KARTU PELAJAR)</label>
+                <input type="text" id="nik">
+            </div>
+
+            <div class="input-group">
+                <label>E-mail</label>
+                <input type="email" id="email">
+            </div>
+
+            <div class="input-group">
+                <label>No. WhatsApp</label>
+                <input type="text" id="wa">
+            </div>
+
+            <div class="input-group">
+                <label>Alamat Lengkap</label>
+                <input type="text" id="alamat">
+            </div>
+
+            <div class="input-group">
+                <label>Category Tiket</label>
+                <select id="kategori">
+                    <option value="">Pilih Tiket</option>
+                    <option value="749000">EARLY BIRD VVIP - Rp.749.000</option>
+                    <option value="249000">EARLY BIRD VIP - Rp.249.000</option>
+                    <option value="179000">EARLY BIRD Tribun A - Rp.179.000</option>
+                    <option value="149000">EARLY BIRD Tribun B - Rp.149.000</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Jumlah Tiket</label>
+                <select id="jumlah">
+                    <option value="">Pilih Jumlah</option>
+                    <option value="1">1 Tiket</option>
+                    <option value="2">2 Tiket</option>
+                    <option value="3">3 Tiket</option>
+                    <option value="4">4 Tiket</option>
+                </select>
+            </div>
+
+            <button id="btnNext">SELANJUTNYA</button>
+
+        </div>
+    </div>
+
+    <!-- HALAMAN 2 -->
+    <div id="page2" class="hidden">
+
+        <div class="banner">
+            <img src="banner-swara.jpg">
+        </div>
+
+        <div class="content">
+
+            <h2>RINGKASAN PEMBELIAN</h2>
+
+            <div class="summary">
+                <p><strong>Nama :</strong> <span id="sumNama"></span></p>
+                <p><strong>Kategori :</strong> <span id="sumKategori"></span></p>
+                <p><strong>Jumlah Tiket :</strong> <span id="sumJumlah"></span></p>
+            </div>
+
+            <div class="qris">
+                <img src="qris.png">
+
+                <div class="total">
+                    Total : Rp. <span id="totalBayar"></span>
+                </div>
+            </div>
+
+            <div class="instructions">
+                SILAHKAN SCAN QRIS Lalu Masukan Nominal sesuai total pembayaran, kemudian klik OK setelah pembayaran berhasil dilakukan.
+            </div>
+
+            <div class="input-group">
+                <label>Upload Bukti Pembayaran</label>
+                <input type="file" id="bukti">
+            </div>
+
+            <div class="checkbox">
+                <input type="checkbox" id="checkBayar">
+                <label for="checkBayar">
+                    ✅ Saya Telah melakukan Pembayaran Sesuai Nominal yang tertulis
+                </label>
+            </div>
+
+            <button id="btnBayar">BAYAR</button>
+
+        </div>
+    </div>
+
+    <!-- HALAMAN 3 -->
+    <div id="page3" class="hidden">
+
+        <div class="failed-page">
+            <div class="failed-box">
+
+                <h1>PEMBAYARAN GAGAL</h1>
+
+                <p>
+                    Silahkan Periksa kembali Data-data Pembelian Anda.
+                </p>
+
+                <p style="margin-top:15px;color:#aaa;">
+                    Anda akan dialihkan kembali...
+                </p>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- LOADING -->
+<div class="loading-screen" id="loading">
+
+    <div class="loader"></div>
+
+    <div class="loading-text">
+        Pembayaran Sedang Diproses
+    </div>
+
+    <div class="loading-sub">
+        Mohon tunggu beberapa saat...
+    </div>
+
+</div>
+
+<script>
+
+const page1 = document.getElementById("page1");
+const page2 = document.getElementById("page2");
+const page3 = document.getElementById("page3");
+
+const btnNext = document.getElementById("btnNext");
+const btnBayar = document.getElementById("btnBayar");
+
+const inputs = [
+    "nama",
+    "nik",
+    "email",
+    "wa",
+    "alamat",
+    "kategori",
+    "jumlah"
+];
+
+function validateForm(){
+
+    let valid = true;
+
+    inputs.forEach(id=>{
+        const val = document.getElementById(id).value;
+        if(val === ""){
+            valid = false;
+        }
+    });
+
+    if(valid){
+        btnNext.classList.add("active");
+    }else{
+        btnNext.classList.remove("active");
+    }
+}
+
+inputs.forEach(id=>{
+    document.getElementById(id).addEventListener("input", validateForm);
+    document.getElementById(id).addEventListener("change", validateForm);
+});
+
+btnNext.addEventListener("click", ()=>{
+
+    if(!btnNext.classList.contains("active")) return;
+
+    const loading = document.getElementById("loading");
+
+    loading.style.display = "flex";
+
+    setTimeout(()=>{
+
+        loading.style.display = "none";
+
+        page1.classList.add("hidden");
+        page2.classList.remove("hidden");
+
+        const kategoriText =
+            document.getElementById("kategori").options[
+                document.getElementById("kategori").selectedIndex
+            ].text;
+
+        document.getElementById("sumNama").innerText =
+            document.getElementById("nama").value;
+
+        document.getElementById("sumKategori").innerText =
+            kategoriText;
+
+        document.getElementById("sumJumlah").innerText =
+            document.getElementById("jumlah").value + " Tiket";
+
+        const harga = parseInt(document.getElementById("kategori").value);
+        const jumlah = parseInt(document.getElementById("jumlah").value);
+
+        const total = harga * jumlah;
+
+        document.getElementById("totalBayar").innerText =
+            total.toLocaleString("id-ID");
+
+    },3000);
+
+});
+
+function validatePayment(){
+
+    const bukti = document.getElementById("bukti").value;
+    const check = document.getElementById("checkBayar").checked;
+
+    if(bukti !== "" && check){
+        btnBayar.classList.add("active");
+    }else{
+        btnBayar.classList.remove("active");
+    }
+
+}
+
+document.getElementById("bukti").addEventListener("change", validatePayment);
+document.getElementById("checkBayar").addEventListener("change", validatePayment);
+
+btnBayar.addEventListener("click", ()=>{
+
+    if(!btnBayar.classList.contains("active")) return;
+
+    const loading = document.getElementById("loading");
+
+    loading.style.display = "flex";
+
+    setTimeout(()=>{
+
+        loading.style.display = "none";
+
+        page2.classList.add("hidden");
+        page3.classList.remove("hidden");
+
+        setTimeout(()=>{
+
+            location.reload();
+
+        },5000);
+
+    },30000);
+
+});
+
+/* TIMER 7 MENIT */
+
+let time = 420;
+
+const countdown = document.getElementById("countdown");
+
+const timer = setInterval(()=>{
+
+    let minutes = Math.floor(time / 60);
+    let seconds = time % 60;
+
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    seconds = seconds < 10 ? "0" + seconds : seconds;
+
+    countdown.innerText = `${minutes}:${seconds}`;
+
+    time--;
+
+    if(time < 0){
+
+        clearInterval(timer);
+
+        page1.classList.add("hidden");
+        page2.classList.add("hidden");
+        page3.classList.remove("hidden");
+
+        setTimeout(()=>{
+            location.reload();
+        },5000);
+
+    }
+
+},1000);
+
+</script>
+
+</body>
+</html>
