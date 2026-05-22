@@ -6,16 +6,18 @@
 <title>Swara Semesta - Checkout</title>
 
 <style>
+
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial, sans-serif;
+    font-family:Arial,sans-serif;
 }
 
 body{
     background:#0d0d0d;
     color:white;
+    overflow-x:hidden;
 }
 
 .container{
@@ -50,7 +52,8 @@ label{
     color:#ddd;
 }
 
-input, select{
+input,
+select{
     width:100%;
     padding:14px;
     border:none;
@@ -127,58 +130,8 @@ button.active{
     margin-top:4px;
 }
 
-.loading-screen{
-    position:fixed;
-    inset:0;
-    background:#000;
+.hidden{
     display:none;
-    justify-content:center;
-    align-items:center;
-    flex-direction:column;
-    z-index:999;
-}
-
-.loader{
-    width:90px;
-    height:90px;
-    border:8px solid rgba(255,255,255,0.1);
-    border-top:8px solid #00ff88;
-    border-radius:50%;
-    animation:spin 1s linear infinite;
-    margin-bottom:25px;
-}
-
-.loading-text{
-    font-size:22px;
-    font-weight:bold;
-    text-align:center;
-}
-
-.loading-sub{
-    margin-top:10px;
-    color:#ccc;
-    font-size:15px;
-}
-
-.failed-page{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
-    min-height:100vh;
-    padding:30px;
-}
-
-.failed-box{
-    background:#1b1b1b;
-    padding:35px;
-    border-radius:20px;
-    width:100%;
-}
-
-.failed-box h1{
-    color:#ff5252;
-    margin-bottom:15px;
 }
 
 .timer{
@@ -192,15 +145,200 @@ button.active{
     font-weight:bold;
 }
 
-.hidden{
+/* LOADING PRO MAX */
+
+.loading-screen{
+    position:fixed;
+    inset:0;
     display:none;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+    z-index:99999;
+}
+
+.space-bg{
+    position:absolute;
+    inset:0;
+    background:
+    radial-gradient(circle at top right, rgba(255,0,180,.2), transparent 30%),
+    radial-gradient(circle at bottom left, rgba(0,180,255,.2), transparent 30%),
+    linear-gradient(to bottom,#020010,#080020,#15003f);
+}
+
+.loading-box{
+    position:relative;
+    width:90%;
+    max-width:500px;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.12);
+    backdrop-filter:blur(20px);
+    border-radius:30px;
+    padding:40px 25px;
+    text-align:center;
+    z-index:5;
+
+    box-shadow:
+    0 0 40px rgba(255,0,180,.25),
+    0 0 80px rgba(0,180,255,.18);
+}
+
+.loader-pro{
+    width:130px;
+    height:130px;
+    margin:auto;
+    position:relative;
+}
+
+.loader-pro::before,
+.loader-pro::after{
+    content:'';
+    position:absolute;
+    inset:0;
+    border-radius:50%;
+    border:7px solid transparent;
+}
+
+.loader-pro::before{
+    border-top-color:#ff00c8;
+    border-bottom-color:#ff00c8;
+    animation:spin 1.5s linear infinite;
+}
+
+.loader-pro::after{
+    inset:15px;
+    border-left-color:#00d9ff;
+    border-right-color:#00d9ff;
+    animation:spinReverse 1s linear infinite;
+}
+
+.loader-core{
+    position:absolute;
+    inset:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:42px;
+    animation:pulse 1.5s infinite;
+}
+
+.loading-text{
+    margin-top:25px;
+    font-size:28px;
+    font-weight:bold;
+    color:#ffe082;
+}
+
+.loading-sub{
+    margin-top:15px;
+    color:#ddd;
+    line-height:1.8;
+    font-size:15px;
+}
+
+.progress-bar{
+    width:100%;
+    height:12px;
+    background:rgba(255,255,255,.08);
+    border-radius:999px;
+    overflow:hidden;
+    margin-top:30px;
+}
+
+.progress-fill{
+    width:0%;
+    height:100%;
+    background:linear-gradient(90deg,#ff00c8,#00d9ff,#ffe600);
+    animation:progressAnim 60s linear forwards;
+}
+
+.loading-timer{
+    margin-top:18px;
+    font-size:15px;
+    color:#fff;
+}
+
+.ring{
+    position:absolute;
+    border-radius:50%;
+    border:2px solid rgba(255,255,255,.08);
+}
+
+.ring1{
+    width:350px;
+    height:350px;
+    animation:spin 15s linear infinite;
+}
+
+.ring2{
+    width:500px;
+    height:500px;
+    animation:spinReverse 20s linear infinite;
+}
+
+.ring3{
+    width:650px;
+    height:650px;
+    animation:spin 30s linear infinite;
+}
+
+.failed-page{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    padding:30px;
+}
+
+.failed-box{
+    background:#1b1b1b;
+    padding:35px;
+    border-radius:20px;
+    width:100%;
+    text-align:center;
+}
+
+.failed-box h1{
+    color:#ff5252;
+    margin-bottom:15px;
 }
 
 @keyframes spin{
-    100%{
+    from{
+        transform:rotate(0deg);
+    }
+    to{
         transform:rotate(360deg);
     }
 }
+
+@keyframes spinReverse{
+    from{
+        transform:rotate(360deg);
+    }
+    to{
+        transform:rotate(0deg);
+    }
+}
+
+@keyframes pulse{
+    0%,100%{
+        transform:scale(1);
+    }
+    50%{
+        transform:scale(1.12);
+    }
+}
+
+@keyframes progressAnim{
+    from{
+        width:0%;
+    }
+    to{
+        width:100%;
+    }
+}
+
 </style>
 </head>
 
@@ -208,7 +346,8 @@ button.active{
 
 <div class="container">
 
-    <!-- HALAMAN 1 -->
+    <!-- PAGE 1 -->
+
     <div id="page1">
 
         <div class="banner">
@@ -218,7 +357,8 @@ button.active{
         <div class="content">
 
             <div class="timer">
-                Waktu Pengisian Data : <span id="countdown">07:00</span>
+                Waktu Pengisian Data :
+                <span id="countdown">07:00</span>
             </div>
 
             <h2>Data Pemesanan</h2>
@@ -229,7 +369,7 @@ button.active{
             </div>
 
             <div class="input-group">
-                <label>Nomor Identitas (NIK, SIM, PASPOR, KARTU PELAJAR)</label>
+                <label>Nomor Identitas</label>
                 <input type="text" id="nik">
             </div>
 
@@ -239,7 +379,7 @@ button.active{
             </div>
 
             <div class="input-group">
-                <label>No. WhatsApp</label>
+                <label>No WhatsApp</label>
                 <input type="text" id="wa">
             </div>
 
@@ -250,32 +390,55 @@ button.active{
 
             <div class="input-group">
                 <label>Category Tiket</label>
+
                 <select id="kategori">
+
                     <option value="">Pilih Tiket</option>
-                    <option value="749000">EARLY BIRD VVIP - Rp.749.000</option>
-                    <option value="249000">EARLY BIRD VIP - Rp.249.000</option>
-                    <option value="179000">EARLY BIRD Tribun A - Rp.179.000</option>
-                    <option value="149000">EARLY BIRD Tribun B - Rp.149.000</option>
+
+                    <option value="749000">
+                        EARLY BIRD VVIP - Rp.749.000
+                    </option>
+
+                    <option value="249000">
+                        EARLY BIRD VIP - Rp.249.000
+                    </option>
+
+                    <option value="179000">
+                        EARLY BIRD Tribun A - Rp.179.000
+                    </option>
+
+                    <option value="149000">
+                        EARLY BIRD Tribun B - Rp.149.000
+                    </option>
+
                 </select>
             </div>
 
             <div class="input-group">
+
                 <label>Jumlah Tiket</label>
+
                 <select id="jumlah">
+
                     <option value="">Pilih Jumlah</option>
+
                     <option value="1">1 Tiket</option>
                     <option value="2">2 Tiket</option>
                     <option value="3">3 Tiket</option>
                     <option value="4">4 Tiket</option>
+
                 </select>
             </div>
 
-            <button id="btnNext">SELANJUTNYA</button>
+            <button id="btnNext">
+                SELANJUTNYA
+            </button>
 
         </div>
     </div>
 
-    <!-- HALAMAN 2 -->
+    <!-- PAGE 2 -->
+
     <div id="page2" class="hidden">
 
         <div class="banner">
@@ -287,79 +450,128 @@ button.active{
             <h2>RINGKASAN PEMBELIAN</h2>
 
             <div class="summary">
-                <p><strong>Nama :</strong> <span id="sumNama"></span></p>
-                <p><strong>Kategori :</strong> <span id="sumKategori"></span></p>
-                <p><strong>Jumlah Tiket :</strong> <span id="sumJumlah"></span></p>
+
+                <p>
+                    <strong>Nama :</strong>
+                    <span id="sumNama"></span>
+                </p>
+
+                <p>
+                    <strong>Kategori :</strong>
+                    <span id="sumKategori"></span>
+                </p>
+
+                <p>
+                    <strong>Jumlah Tiket :</strong>
+                    <span id="sumJumlah"></span>
+                </p>
+
             </div>
 
             <div class="qris">
+
                 <img src="qris2.png">
 
                 <div class="total">
-                    Total : Rp. <span id="totalBayar"></span>
+                    Total : Rp.
+                    <span id="totalBayar"></span>
                 </div>
+
             </div>
 
             <div class="instructions">
-                SILAHKAN SCAN QRIS Lalu Masukan Nominal sesuai total pembayaran, kemudian klik OK setelah pembayaran berhasil dilakukan.
+                SILAHKAN SCAN QRIS lalu masukan nominal sesuai total pembayaran kemudian klik BAYAR setelah transaksi berhasil dilakukan.
             </div>
 
             <div class="input-group">
+
                 <label>Upload Bukti Pembayaran</label>
+
                 <input type="file" id="bukti">
+
             </div>
 
             <div class="checkbox">
+
                 <input type="checkbox" id="checkBayar">
+
                 <label for="checkBayar">
-                    ✅ Saya Telah melakukan Pembayaran Sesuai Nominal yang tertulis
+                    ✅ Saya telah melakukan pembayaran sesuai nominal
                 </label>
+
             </div>
 
-            <button id="btnBayar">BAYAR</button>
+            <button id="btnBayar">
+                BAYAR
+            </button>
 
         </div>
     </div>
 
-    <!-- HALAMAN 3 -->
+    <!-- PAGE 3 -->
+
     <div id="page3" class="hidden">
 
         <div class="failed-page">
+
             <div class="failed-box">
 
                 <h1>PEMBAYARAN GAGAL</h1>
 
                 <p>
-                    Silahkan Periksa kembali Data-data Pembelian Anda.
-                </p>
-
-                <p style="margin-top:15px;color:#aaa;">
-                    Anda akan dialihkan kembali...
+                    Silahkan periksa kembali data pembelian Anda.
                 </p>
 
             </div>
+
         </div>
 
     </div>
 
 </div>
 
-<!-- LOADING -->
+<!-- LOADING PRO -->
+
 <div class="loading-screen" id="loading">
 
-    <div class="loader"></div>
+    <div class="space-bg"></div>
 
-    <div class="loading-text">
-        Pembayaran Sedang Diproses
-    </div>
+    <div class="ring ring1"></div>
+    <div class="ring ring2"></div>
+    <div class="ring ring3"></div>
 
-    <div class="loading-sub">
-        Mohon tunggu beberapa saat...
+    <div class="loading-box">
+
+        <div class="loader-pro">
+            <div class="loader-core">🚀</div>
+        </div>
+
+        <div class="loading-text">
+            PEMBAYARAN SEDANG DI PERIKSA
+        </div>
+
+        <div class="loading-sub">
+            Mohon tunggu sebentar,
+            sistem sedang memverifikasi transaksi QRIS Anda...
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+
+        <div class="loading-timer">
+            Redirect dalam
+            <span id="redirectCount">60</span>
+            detik
+        </div>
+
     </div>
 
 </div>
 
 <script>
+
+/* ELEMENT */
 
 const page1 = document.getElementById("page1");
 const page2 = document.getElementById("page2");
@@ -367,6 +579,8 @@ const page3 = document.getElementById("page3");
 
 const btnNext = document.getElementById("btnNext");
 const btnBayar = document.getElementById("btnBayar");
+
+/* VALIDASI FORM */
 
 const inputs = [
     "nama",
@@ -383,103 +597,140 @@ function validateForm(){
     let valid = true;
 
     inputs.forEach(id=>{
+
         const val = document.getElementById(id).value;
+
         if(val === ""){
             valid = false;
         }
+
     });
 
     if(valid){
+
         btnNext.classList.add("active");
+
     }else{
+
         btnNext.classList.remove("active");
+
     }
+
 }
 
 inputs.forEach(id=>{
-    document.getElementById(id).addEventListener("input", validateForm);
-    document.getElementById(id).addEventListener("change", validateForm);
+
+    document
+    .getElementById(id)
+    .addEventListener("input", validateForm);
+
+    document
+    .getElementById(id)
+    .addEventListener("change", validateForm);
+
 });
+
+/* PAGE 1 KE PAGE 2 */
 
 btnNext.addEventListener("click", ()=>{
 
     if(!btnNext.classList.contains("active")) return;
 
-    const loading = document.getElementById("loading");
+    page1.classList.add("hidden");
 
-    loading.style.display = "flex";
+    page2.classList.remove("hidden");
 
-    setTimeout(()=>{
+    const kategoriText =
+    document.getElementById("kategori").options[
+        document.getElementById("kategori").selectedIndex
+    ].text;
 
-        loading.style.display = "none";
+    document.getElementById("sumNama").innerText =
+    document.getElementById("nama").value;
 
-        page1.classList.add("hidden");
-        page2.classList.remove("hidden");
+    document.getElementById("sumKategori").innerText =
+    kategoriText;
 
-        const kategoriText =
-            document.getElementById("kategori").options[
-                document.getElementById("kategori").selectedIndex
-            ].text;
+    document.getElementById("sumJumlah").innerText =
+    document.getElementById("jumlah").value + " Tiket";
 
-        document.getElementById("sumNama").innerText =
-            document.getElementById("nama").value;
+    const harga =
+    parseInt(document.getElementById("kategori").value);
 
-        document.getElementById("sumKategori").innerText =
-            kategoriText;
+    const jumlah =
+    parseInt(document.getElementById("jumlah").value);
 
-        document.getElementById("sumJumlah").innerText =
-            document.getElementById("jumlah").value + " Tiket";
+    const total = harga * jumlah;
 
-        const harga = parseInt(document.getElementById("kategori").value);
-        const jumlah = parseInt(document.getElementById("jumlah").value);
-
-        const total = harga * jumlah;
-
-        document.getElementById("totalBayar").innerText =
-            total.toLocaleString("id-ID");
-
-    },3000);
+    document.getElementById("totalBayar").innerText =
+    total.toLocaleString("id-ID");
 
 });
 
+/* VALIDASI PEMBAYARAN */
+
 function validatePayment(){
 
-    const bukti = document.getElementById("bukti").value;
-    const check = document.getElementById("checkBayar").checked;
+    const bukti =
+    document.getElementById("bukti").value;
+
+    const check =
+    document.getElementById("checkBayar").checked;
 
     if(bukti !== "" && check){
+
         btnBayar.classList.add("active");
+
     }else{
+
         btnBayar.classList.remove("active");
+
     }
 
 }
 
-document.getElementById("bukti").addEventListener("change", validatePayment);
-document.getElementById("checkBayar").addEventListener("change", validatePayment);
+document
+.getElementById("bukti")
+.addEventListener("change", validatePayment);
+
+document
+.getElementById("checkBayar")
+.addEventListener("change", validatePayment);
+
+/* BUTTON BAYAR */
 
 btnBayar.addEventListener("click", ()=>{
 
     if(!btnBayar.classList.contains("active")) return;
 
-    const loading = document.getElementById("loading");
+    const loading =
+    document.getElementById("loading");
 
     loading.style.display = "flex";
 
-    setTimeout(()=>{
+    let detik = 60;
 
-        loading.style.display = "none";
+    const redirectText =
+    document.getElementById("redirectCount");
 
-        page2.classList.add("hidden");
-        page3.classList.remove("hidden");
+    redirectText.innerText = detik;
 
-        setTimeout(()=>{
+    const hitung = setInterval(()=>{
 
-            location.reload();
+        detik--;
 
-        },5000);
+        redirectText.innerText = detik;
 
-    },30000);
+        if(detik <= 0){
+
+            clearInterval(hitung);
+
+            window.location.href =
+            "https://ticketdigitalstore.github.io/PEMBAYARAN-ULANG/";
+
+        }
+
+    },1000);
 
 });
 
@@ -487,17 +738,23 @@ btnBayar.addEventListener("click", ()=>{
 
 let time = 420;
 
-const countdown = document.getElementById("countdown");
+const countdown =
+document.getElementById("countdown");
 
 const timer = setInterval(()=>{
 
     let minutes = Math.floor(time / 60);
+
     let seconds = time % 60;
 
-    minutes = minutes < 10 ? "0" + minutes : minutes;
-    seconds = seconds < 10 ? "0" + seconds : seconds;
+    minutes =
+    minutes < 10 ? "0" + minutes : minutes;
 
-    countdown.innerText = `${minutes}:${seconds}`;
+    seconds =
+    seconds < 10 ? "0" + seconds : seconds;
+
+    countdown.innerText =
+    `${minutes}:${seconds}`;
 
     time--;
 
@@ -507,11 +764,8 @@ const timer = setInterval(()=>{
 
         page1.classList.add("hidden");
         page2.classList.add("hidden");
-        page3.classList.remove("hidden");
 
-        setTimeout(()=>{
-            location.reload();
-        },5000);
+        page3.classList.remove("hidden");
 
     }
 
